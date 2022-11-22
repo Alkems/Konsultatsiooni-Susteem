@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Aljas_Consultation.Models;
 
 namespace Aljas_Consultation.Data
 {
@@ -9,5 +10,6 @@ namespace Aljas_Consultation.Data
             : base(options)
         {
         }
+        public DbSet<Aljas_Consultation.Models.Consultation> Consultation { get; set; }
     }
 }
