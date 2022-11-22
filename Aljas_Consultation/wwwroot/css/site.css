@@ -9,10 +9,18 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+.border-top {
+    background-color: lightcoral
+}
+
+.navbar {
+    background-color: lightcoral
 }
