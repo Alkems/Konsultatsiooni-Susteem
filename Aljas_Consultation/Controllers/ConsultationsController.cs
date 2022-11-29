@@ -48,8 +48,15 @@ namespace Aljas_Consultation.Controllers
         // GET: Consultations/Create
         public IActionResult Create()
         {
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Name");
+            ViewData["PeriodId"] = CreatePeriodSelectList();
             return View();
+        }
+
+        private List<SelectListItem> CreatePeriodSelectList(int? selected=null)
+        {
+            var selectList = new SelectList(_context.Set<Period>(), "Id", "Name", selected).ToList();
+            selectList.Insert(0, new SelectListItem("Vali Periood","-1"));
+            return selectList;
         }
 
         // POST: Consultations/Create
@@ -72,7 +79,7 @@ namespace Aljas_Consultation.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
+            ViewData["PeriodId"] = CreatePeriodSelectList(consultation.PeriodId);
             return View(consultation);
         }
 
