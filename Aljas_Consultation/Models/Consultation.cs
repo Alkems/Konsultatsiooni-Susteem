@@ -11,6 +11,7 @@ namespace Aljas_Consultation.Models
         public string? Day { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string? Period { get; set; }
+        public Period Session { get; set; }
+        public int PeriodId { get; set; }
     }
 }

@@ -10,97 +10,85 @@ using Aljas_Consultation.Models;
 
 namespace Aljas_Consultation.Controllers
 {
-    public class ConsultationsController : Controller
+    public class PeriodsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ConsultationsController(ApplicationDbContext context)
+        public PeriodsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Consultations
+        // GET: Periods
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Consultation.Include(c => c.Session);
-            return View(await applicationDbContext.ToListAsync());
+              return View(await _context.Period.ToListAsync());
         }
 
-        // GET: Consultations/Details/5
+        // GET: Periods/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Consultation == null)
+            if (id == null || _context.Period == null)
             {
                 return NotFound();
             }
 
-            var consultation = await _context.Consultation
-                .Include(c => c.Session)
+            var period = await _context.Period
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (consultation == null)
+            if (period == null)
             {
                 return NotFound();
             }
 
-            return View(consultation);
+            return View(period);
         }
 
-        // GET: Consultations/Create
+        // GET: Periods/Create
         public IActionResult Create()
         {
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Name");
             return View();
         }
 
-        // POST: Consultations/Create
+        // POST: Periods/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Period period)
         {
-
-            var period = await _context.Period
-                .FirstOrDefaultAsync(m => m.Id == consultation.PeriodId);
-            consultation.Session = period;
-            ModelState.ClearValidationState(nameof(Consultation.Session));
-            TryValidateModel(consultation);
-
             if (ModelState.IsValid)
             {
-                _context.Add(consultation);
+                _context.Add(period);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
-            return View(consultation);
+            return View(period);
         }
 
-        // GET: Consultations/Edit/5
+        // GET: Periods/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Consultation == null)
+            if (id == null || _context.Period == null)
             {
                 return NotFound();
             }
 
-            var consultation = await _context.Consultation.FindAsync(id);
-            if (consultation == null)
+            var period = await _context.Period.FindAsync(id);
+            if (period == null)
             {
                 return NotFound();
             }
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
-            return View(consultation);
+            return View(period);
         }
 
-        // POST: Consultations/Edit/5
+        // POST: Periods/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Period period)
         {
-            if (id != consultation.Id)
+            if (id != period.Id)
             {
                 return NotFound();
             }
@@ -109,12 +97,12 @@ namespace Aljas_Consultation.Controllers
             {
                 try
                 {
-                    _context.Update(consultation);
+                    _context.Update(period);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ConsultationExists(consultation.Id))
+                    if (!PeriodExists(period.Id))
                     {
                         return NotFound();
                     }
@@ -125,51 +113,49 @@ namespace Aljas_Consultation.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
-            return View(consultation);
+            return View(period);
         }
 
-        // GET: Consultations/Delete/5
+        // GET: Periods/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Consultation == null)
+            if (id == null || _context.Period == null)
             {
                 return NotFound();
             }
 
-            var consultation = await _context.Consultation
-                .Include(c => c.Session)
+            var period = await _context.Period
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (consultation == null)
+            if (period == null)
             {
                 return NotFound();
             }
 
-            return View(consultation);
+            return View(period);
         }
 
-        // POST: Consultations/Delete/5
+        // POST: Periods/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Consultation == null)
+            if (_context.Period == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Consultation'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Period'  is null.");
             }
-            var consultation = await _context.Consultation.FindAsync(id);
-            if (consultation != null)
+            var period = await _context.Period.FindAsync(id);
+            if (period != null)
             {
-                _context.Consultation.Remove(consultation);
+                _context.Period.Remove(period);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ConsultationExists(int id)
+        private bool PeriodExists(int id)
         {
-          return _context.Consultation.Any(e => e.Id == id);
+          return _context.Period.Any(e => e.Id == id);
         }
     }
 }

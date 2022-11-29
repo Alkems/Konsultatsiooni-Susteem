@@ -11,5 +11,6 @@ namespace Aljas_Consultation.Data
         {
         }
         public DbSet<Aljas_Consultation.Models.Consultation> Consultation { get; set; }
+        public DbSet<Aljas_Consultation.Models.Period> Period { get; set; }
     }
 }

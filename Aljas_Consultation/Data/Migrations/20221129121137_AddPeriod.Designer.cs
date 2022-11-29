@@ -4,6 +4,7 @@ using Aljas_Consultation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aljas_Consultation.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221129121137_AddPeriod")]
+    partial class AddPeriod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace Aljas_Consultation.Data.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("Consultation", (string)null);
+                    b.ToTable("Consultation");
                 });
 
             modelBuilder.Entity("Aljas_Consultation.Models.Period", b =>
@@ -69,7 +71,7 @@ namespace Aljas_Consultation.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Period", (string)null);
+                    b.ToTable("Period");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
