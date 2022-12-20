@@ -26,6 +26,15 @@ namespace Aljas_Consultation.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> ConsultationsByPeriod([Bind(Prefix = "id")]int PeriodId)
+        {
+            var applicationDbContext = _context
+                .Consultation
+                .Include(c => c.Session)
+                .Where(r => r.Session == );
+            return View(await applicationDbContext.ToListAsync());
+        }
+
         // GET: Consultations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
