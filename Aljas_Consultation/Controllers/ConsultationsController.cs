@@ -35,6 +35,29 @@ namespace Aljas_Consultation.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> MissingConsultations()
+        {
+            var periods = await _context.Period.ToListAsync();
+            var teachers = new List<string>();
+
+            foreach (var period in periods)
+            {
+                var consultations = await _context.Consultation
+                    .Include(c => c.Session)
+                    .Where(c => c.PeriodId == period.Id)
+                    .ToListAsync();
+
+                var teachersInPeriod = consultations
+                    .GroupBy(c => c.Teacher)
+                    .Where(g => g.Count() < 2)
+                    .Select(g => g.Key);
+
+                teachers.AddRange(teachersInPeriod);
+            }
+
+            return View(teachers);
+        }
+
         // GET: Consultations/Details/5
         public async Task<IActionResult> Details(int? id)
         {

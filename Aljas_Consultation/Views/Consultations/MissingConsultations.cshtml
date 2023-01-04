@@ -1,0 +1,19 @@
+﻿@model List<string>
+
+<h2>Missing Consultations</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Teacher who do not have 2 consultations in each period</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var teacher in Model)
+        {
+            <tr>
+                <td>@teacher</td>
+            </tr>
+        }
+    </tbody>
+</table>
