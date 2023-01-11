@@ -44,7 +44,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Mihkel",
-                            Classroom = 212,
+                            Classroom = "253A",
                             Day = "Monday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -54,7 +54,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Tanel",
-                            Classroom = 152,
+                            Classroom = "152A",
                             Day = "Tuesday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -64,7 +64,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Mihkel",
-                            Classroom = 212,
+                            Classroom = "212B",
                             Day = "Friday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -74,7 +74,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Mihkel",
-                            Classroom = 212,
+                            Classroom = "212B",
                             Day = "Monday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -84,7 +84,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Mihkel",
-                            Classroom = 212,
+                            Classroom = "133B",
                             Day = "Monday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -94,7 +94,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Mihkel",
-                            Classroom = 212,
+                            Classroom = "212B",
                             Day = "Thursday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -104,7 +104,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Peeter",
-                            Classroom = 341,
+                            Classroom = "341A",
                             Day = "Thursday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -114,7 +114,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Mihkel",
-                            Classroom = 212,
+                            Classroom = "B",
                             Day = "Tuesday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -124,7 +124,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Tanel",
-                            Classroom = 152,
+                            Classroom = "341A",
                             Day = "Wednseday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,
@@ -134,7 +134,7 @@ namespace Aljas_Consultation.Data
                         new Consultation
                         {
                             Teacher = "Tanel",
-                            Classroom = 152,
+                            Classroom = "341A",
                             Day = "Friday",
                             StartTime = DateTime.Now,
                             EndTime = DateTime.Now,

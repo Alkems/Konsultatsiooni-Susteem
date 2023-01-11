@@ -35,6 +35,9 @@ namespace Aljas_Consultation.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+
+        
+
         public async Task<IActionResult> MissingConsultations()
         {
             var periods = await _context.Period.ToListAsync();
@@ -77,11 +80,30 @@ namespace Aljas_Consultation.Controllers
             return View(consultation);
         }
 
-        // GET: Consultations/Create
         public IActionResult Create()
         {
             ViewData["PeriodId"] = CreatePeriodSelectList();
             return View();
+        }
+
+        // GET: Consultations/Create
+        public IActionResult AddConsultation()
+        {
+            ViewData["PeriodId"] = CreatePeriodSelectList();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddConsultation([Bind("Id,Name")] Period period)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(period);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(period);
         }
 
         private List<SelectListItem> CreatePeriodSelectList(int? selected=null)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aljas_Consultation.Models
 {
@@ -6,10 +7,16 @@ namespace Aljas_Consultation.Models
     {
         // Id=1, Teacher=Mihkel, Classroom=215b, Day=Monaday, StartTime=15:00, EndTime=16:00, Period=First
         public int Id { get; set; }
+        [Required(AllowEmptyStrings = false)]
         public string? Teacher { get; set; }
-        public int Classroom { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        public string Classroom { get; set; }    
+        [Required(AllowEmptyStrings = false)]
         public string? Day { get; set; }
+
+        [DataType(DataType.Time)]
         public DateTime StartTime { get; set; }
+        [DataType(DataType.Time)]
         public DateTime EndTime { get; set; }
         public Period Session { get; set; }
         public int PeriodId { get; set; }
