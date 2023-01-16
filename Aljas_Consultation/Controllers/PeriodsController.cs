@@ -65,6 +65,15 @@ namespace Aljas_Consultation.Controllers
             return View(period);
         }
 
+        public async Task<IActionResult> AddPeriod(int periodId)
+        {
+            var consultation = await _context.Consultation.FirstOrDefaultAsync(m => m.Id == periodId);
+            var period = new Period() { periodId = periodId, Consultations = consultation };
+            _context.Period.Add(period);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Consultation));
+        }
+
         // GET: Periods/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

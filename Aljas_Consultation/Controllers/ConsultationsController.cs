@@ -95,16 +95,19 @@ namespace Aljas_Consultation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddConsultation([Bind("Id,Name")] Period period)
+        public async Task<IActionResult> AddConsultation([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(period);
+                _context.Add(consultation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(PeriodsController.CreateForUser),
+                            nameof(PeriodsController).Replace("Controller", ""),
+                            new { periodId = period.Id });
             }
-            return View(period);
+            return View(consultation);
         }
+
 
         private List<SelectListItem> CreatePeriodSelectList(int? selected=null)
         {
