@@ -101,9 +101,7 @@ namespace Aljas_Consultation.Controllers
             {
                 _context.Add(consultation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(PeriodsController.CreateForUser),
-                            nameof(PeriodsController).Replace("Controller", ""),
-                            new { periodId = period.Id });
+                return RedirectToAction(nameof(Consultation));
             }
             return View(consultation);
         }

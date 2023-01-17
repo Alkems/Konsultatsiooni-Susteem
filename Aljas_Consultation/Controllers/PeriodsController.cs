@@ -65,13 +65,10 @@ namespace Aljas_Consultation.Controllers
             return View(period);
         }
 
-        public async Task<IActionResult> AddPeriod(int periodId)
+        public async Task<IActionResult> ShowPeriods()
         {
-            var consultation = await _context.Consultation.FirstOrDefaultAsync(m => m.Id == periodId);
-            var period = new Period() { periodId = periodId, Consultations = consultation };
-            _context.Period.Add(period);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Consultation));
+            var applicationDbContext = _context.Period.Include(e => e.Consultations).Where(ex => ex.Consultations == null);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Periods/Edit/5
