@@ -95,13 +95,17 @@ namespace Aljas_Consultation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddConsultation([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
+        public async Task<IActionResult> AddConsultation([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,Session,PeriodId")] Consultation consultation)
         {
+            var Session = await _context.Period.FirstOrDefaultAsync(m => m.Id == consultation.PeriodId);
+            consultation.Session = Session;
+            ModelState.ClearValidationState(nameof(consultation.Session));
+            TryValidateModel(consultation);
             if (ModelState.IsValid)
             {
                 _context.Add(consultation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Consultation));
+                return RedirectToAction(nameof(Index));
             }
             return View(consultation);
         }

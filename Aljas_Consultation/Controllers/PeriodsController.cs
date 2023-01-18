@@ -65,10 +65,30 @@ namespace Aljas_Consultation.Controllers
             return View(period);
         }
 
-        public async Task<IActionResult> ShowPeriods()
+        public IActionResult AddPeriod()
         {
-            var applicationDbContext = _context.Period.Include(e => e.Consultations).Where(ex => ex.Consultations == null);
-            return View(await applicationDbContext.ToListAsync());
+            return View();
+        }
+
+        // POST: Periods/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPeriod([Bind("Name")] Period period)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(period);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(PeriodsController.ShowPeriods));
+            }
+            return View(period);
+        }
+
+        public async Task<IActionResult> ShowPeriods([Bind("Name")] Period period)
+        {
+            return View(await _context.Period.ToListAsync());
         }
 
         // GET: Periods/Edit/5
