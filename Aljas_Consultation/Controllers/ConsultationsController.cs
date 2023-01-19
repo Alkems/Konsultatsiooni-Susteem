@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Aljas_Consultation.Data;
 using Aljas_Consultation.Models;
+using NuGet.DependencyResolver;
 
 namespace Aljas_Consultation.Controllers
 {
@@ -26,17 +27,45 @@ namespace Aljas_Consultation.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public async Task<IActionResult> ConsultationsByPeriod([Bind(Prefix = "id")] int PeriodId)
+        public async Task<IActionResult> ConsultationsByPeriod([Bind(Prefix = "id")] int PeriodId, string Teacher, string searchString)
         {
             var applicationDbContext = _context
                 .Consultation
                 .Include(c => c.Session)
                 .Where(r => r.PeriodId == PeriodId);
             return View(await applicationDbContext.ToListAsync());
+
+            if (_context.Consultation == null)
+            {
+                return Problem("Entity set 'MVC'  is null.");
+            }
+
+            // Use LINQ to get list of genres.
+            IQueryable<string> genreQuery = from m in _context.Consultation
+                                            orderby m.Teacher
+                                            select m.Teacher;
+            var consultations = from m in _context.Consultation
+                                select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                consultations = consultations.Where(s => s.Teacher!.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(Teacher))
+            {
+                consultations = consultations.Where(x => x.Teacher == Teacher);
+            }
+
+            var consultationTeacherVM = new ConsultationTeacherViewModel
+            {
+                Teachers = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Consultations = await consultations.ToListAsync()
+            };
         }
 
 
-        
+
 
         public async Task<IActionResult> MissingConsultations()
         {
@@ -129,7 +158,7 @@ namespace Aljas_Consultation.Controllers
             var period = await _context.Period
                 .FirstOrDefaultAsync(m => m.Id == consultation.PeriodId);
             consultation.Session = period;
-            ModelState.ClearValidationState(nameof(Consultation.Session));
+            ModelState.ClearValidationState(nameof(Consultation));
             TryValidateModel(consultation);
 
             if (ModelState.IsValid)

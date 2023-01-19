@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Aljas_Consultation.Models.Consultation>
+﻿@model List<Aljas_Consultation.Models.ConsultationTeacherViewModel>
 
 @{
     ViewData["Title"] = "View";
@@ -6,35 +6,47 @@
 
 <h1>View</h1>
 
+<form asp-controller="Consultations" asp-action="ConsultationsByPeriod" method="get">
+    <p>
+
+        <select asp-for="Teachers" asp-items="Model.Teachers">
+            <option value="">All</option>
+        </select>
+
+        Title: <input type="text" name="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
-        <tr> 
+        <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Teacher)
+                @Html.DisplayNameFor(model => model.Consultations![0].Teacher)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Classroom)
+                @Html.DisplayNameFor(model => model.Consultations![0].Classroom)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Day)
+                @Html.DisplayNameFor(model => model.Consultations![0].Day)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartTime)
+                @Html.DisplayNameFor(model => model.Consultations![0].StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                @Html.DisplayNameFor(model => model.Consultations![0].EndTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Session)
+                @Html.DisplayNameFor(model => model.Consultations![0].Session)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model.Consultations)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Teacher)

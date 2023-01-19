@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aljas_Consultation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230118093854_init")]
-    partial class init
+    [Migration("20230119075136_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
