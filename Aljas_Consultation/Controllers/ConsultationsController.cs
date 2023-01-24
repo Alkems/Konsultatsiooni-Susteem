@@ -72,8 +72,11 @@ namespace Aljas_Consultation.Controllers
 
         public async Task<List<MissingConsultation>> CheckForMissingConsultations(int lastAddedPeriodId)
         {
-            var periods = await _context.Period.Where(p => p.Id != lastAddedPeriodId).ToListAsync();
+            var periods = await _context.Period.ToListAsync();
             var missingConsultations = new List<MissingConsultation>();
+            var allConsultations = await _context.Consultation.ToListAsync();
+
+            var allTeachers = allConsultations.Select(c => c.Teacher).Distinct();
 
             foreach (var period in periods)
             {
@@ -84,16 +87,20 @@ namespace Aljas_Consultation.Controllers
 
                 var teachersInPeriod = consultations
                     .GroupBy(c => c.Teacher)
-                    .Where(g => g.Count() < 2)
                     .Select(g => g.Key);
 
-                foreach (var teacher in teachersInPeriod)
+                //Get the teachers who does not have consultation in this period
+                var missingTeachers = allTeachers.Except(teachersInPeriod);
+
+                foreach (var teacher in missingTeachers)
                 {
                     missingConsultations.Add(new MissingConsultation() { Teacher = teacher, Period = period.Name });
                 }
             }
             return missingConsultations;
         }
+
+
 
 
 
