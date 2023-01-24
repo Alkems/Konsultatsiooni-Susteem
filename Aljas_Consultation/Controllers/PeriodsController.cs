@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Aljas_Consultation.Data;
 using Aljas_Consultation.Models;
+using static Aljas_Consultation.Controllers.ConsultationsController;
 
 namespace Aljas_Consultation.Controllers
 {
@@ -14,10 +15,15 @@ namespace Aljas_Consultation.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        private readonly ConsultationsController _consultationsController;
+
+        private int _lastAddedPeriodId;
+
         public PeriodsController(ApplicationDbContext context)
         {
             _context = context;
-        }
+            _consultationsController = new ConsultationsController(context);
+    }
 
         // GET: Periods
         public async Task<IActionResult> Index()
@@ -73,15 +79,17 @@ namespace Aljas_Consultation.Controllers
         // POST: Periods/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPeriod([Bind("Name")] Period period)
+        public async Task<IActionResult> AddPeriod(Period period)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(period);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(PeriodsController.ShowPeriods));
+                _lastAddedPeriodId = period.Id;
+                return View("ShowPeriods", _context.Period.ToList());
             }
             return View(period);
         }

@@ -1,9 +1,13 @@
+using Aljas_Consultation.Controllers;
 using Aljas_Consultation.Data;
 using Aljas_Consultation.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ConsultationsController>();
+
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

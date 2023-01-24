@@ -34,43 +34,46 @@ namespace Aljas_Consultation.Controllers
                 .Include(c => c.Session)
                 .Where(r => r.PeriodId == PeriodId);
             return View(await applicationDbContext.ToListAsync());
+        }
 
-            if (_context.Consultation == null)
-            {
-                return Problem("Entity set 'MVC'  is null.");
-            }
+        // Get all the teachers who have not entered a consultation for the new period
+        public async Task<List<string>> GetMissingTeachers(int periodId)
+        {
+            // Get all the consultations for the new period
+            var consultations = await _context.Consultation
+                .Where(c => c.PeriodId == periodId)
+                .ToListAsync();
 
-            // Use LINQ to get list of genres.
-            IQueryable<string> genreQuery = from m in _context.Consultation
-                                            orderby m.Teacher
-                                            select m.Teacher;
-            var consultations = from m in _context.Consultation
-                                select m;
+            // Group the consultations by teacher
+            var groupedConsultations = consultations.GroupBy(c => c.Teacher);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                consultations = consultations.Where(s => s.Teacher!.Contains(searchString));
-            }
+            // Get the teachers who have not entered a consultation for the new period
+            var missingTeachers = groupedConsultations
+                .Where(g => g.Count() == 0)
+                .Select(g => g.Key);
 
-            if (!string.IsNullOrEmpty(Teacher))
-            {
-                consultations = consultations.Where(x => x.Teacher == Teacher);
-            }
+            return missingTeachers.ToList();
+        }
 
-            var consultationTeacherVM = new ConsultationTeacherViewModel
-            {
-                Teachers = new SelectList(await genreQuery.Distinct().ToListAsync()),
-                Consultations = await consultations.ToListAsync()
-            };
+
+        public class MissingConsultation
+        {
+            public string Teacher { get; set; }
+            public string Period { get; set; }
+        }
+
+        public async Task<IActionResult> MissingConsultations(int lastAddedPeriodId)
+        {
+            var missingConsultations = await CheckForMissingConsultations(lastAddedPeriodId);
+            return View(missingConsultations);
         }
 
 
 
-
-        public async Task<IActionResult> MissingConsultations()
+        public async Task<List<MissingConsultation>> CheckForMissingConsultations(int lastAddedPeriodId)
         {
-            var periods = await _context.Period.ToListAsync();
-            var teachers = new List<string>();
+            var periods = await _context.Period.Where(p => p.Id != lastAddedPeriodId).ToListAsync();
+            var missingConsultations = new List<MissingConsultation>();
 
             foreach (var period in periods)
             {
@@ -84,11 +87,17 @@ namespace Aljas_Consultation.Controllers
                     .Where(g => g.Count() < 2)
                     .Select(g => g.Key);
 
-                teachers.AddRange(teachersInPeriod);
+                foreach (var teacher in teachersInPeriod)
+                {
+                    missingConsultations.Add(new MissingConsultation() { Teacher = teacher, Period = period.Name });
+                }
             }
-
-            return View(teachers);
+            return missingConsultations;
         }
+
+
+
+
 
         // GET: Consultations/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -134,7 +143,7 @@ namespace Aljas_Consultation.Controllers
             {
                 _context.Add(consultation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ConsultationsByPeriod", new { id = consultation.PeriodId });
             }
             return View(consultation);
         }

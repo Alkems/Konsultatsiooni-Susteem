@@ -1,18 +1,20 @@
-﻿@model List<string>
+﻿@using Aljas_Consultation.Controllers
 
 <h2>Missing Consultations</h2>
 
-<table>
+<table class="table">
     <thead>
         <tr>
-            <th>Teacher who do not have 2 consultations in each period</th>
+            <th>Teacher</th>
+            <th>Period missing consultations</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var teacher in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@teacher</td>
+                <td class="pl-3">@item.Teacher</td>
+                <td class="pl-3">@item.Period</td>
             </tr>
         }
     </tbody>
