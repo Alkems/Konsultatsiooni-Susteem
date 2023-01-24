@@ -27,19 +27,38 @@ namespace Aljas_Consultation.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public async Task<IActionResult> ConsultationsByPeriod([Bind(Prefix = "id")] int PeriodId, string Teacher, string searchString)
+        public async Task<IActionResult> ConsultationsByPeriod([Bind(Prefix = "id")] int PeriodId, string Teacher, string searchString, string ConsultationTeacher)
         {
             var applicationDbContext = _context
                 .Consultation
                 .Include(c => c.Session)
                 .Where(r => r.PeriodId == PeriodId);
 
-            if (!String.IsNullOrEmpty(searchString))
+            IQueryable<string> genreQuery = from m in _context.Consultation
+                                            orderby m.Teacher
+                                            select m.Teacher;
+            var consultations = from m in _context.Consultation
+                                select m;
+
+            if (!string.IsNullOrEmpty(ConsultationTeacher))
             {
-                applicationDbContext = applicationDbContext.Where(s => s.Teacher!.Contains(searchString));
+                consultations = consultations.Where(x => x.Teacher == ConsultationTeacher);
             }
 
-            return View(await applicationDbContext.ToListAsync());
+            if (PeriodId != 0)
+            {
+                consultations = consultations.Where(x => x.PeriodId == PeriodId);
+            }
+
+
+            var ConsultationTeacherVM = new ConsultationTeacherViewModel
+            {
+                Teachers = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Consultations = await consultations.ToListAsync()
+
+            };
+
+            return View(ConsultationTeacherVM);
         }
 
         // Get all the teachers who have not entered a consultation for the new period

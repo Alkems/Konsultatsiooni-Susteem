@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Aljas_Consultation.Models.Consultation>
+﻿@model Aljas_Consultation.Models.ConsultationTeacherViewModel
 
 @{
     ViewData["Title"] = "View";
@@ -12,8 +12,10 @@
 
 <form asp-controller="Consultations" asp-action="ConsultationsByPeriod" method="get">
     <p>
-        Title: <input type="text" name="searchString" />
-        <input type="hidden" name="PeriodId" value="@ViewBag.PeriodId" />
+        <select asp-for="ConsultationTeacher" asp-items="Model.Teachers">
+            <option value="">All</option>
+        </select>
+
         <input type="submit" value="Filter" />
     </p>
 </form>
@@ -21,54 +23,54 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Teacher)
+                @Html.DisplayNameFor(model => model.Consultations![0].Teacher)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Classroom)
+                @Html.DisplayNameFor(model => model.Consultations![0].Classroom)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Day)
+                @Html.DisplayNameFor(model => model.Consultations![0].Day)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartTime)
+                @Html.DisplayNameFor(model => model.Consultations![0].StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                @Html.DisplayNameFor(model => model.Consultations![0].EndTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Session)
+                @Html.DisplayNameFor(model => model.Consultations![0].Session)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Consultations!)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Teacher)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Classroom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Day)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Session.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Teacher)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Classroom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Session.Id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

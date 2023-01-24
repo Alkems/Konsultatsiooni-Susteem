@@ -6,6 +6,7 @@ namespace Aljas_Consultation.Models
     {
         public List<Consultation>? Consultations { get; set; }
         public SelectList? Teachers { get; set; }
+        public string? ConsultationTeacher { get; set; }
         public string? SearchString { get; set; }
     }
 }
