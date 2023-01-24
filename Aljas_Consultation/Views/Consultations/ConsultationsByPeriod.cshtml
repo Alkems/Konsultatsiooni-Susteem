@@ -9,6 +9,14 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-controller="Consultations" asp-action="ConsultationsByPeriod" method="get">
+    <p>
+        Title: <input type="text" name="searchString" />
+        <input type="hidden" name="PeriodId" value="@ViewBag.PeriodId" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>

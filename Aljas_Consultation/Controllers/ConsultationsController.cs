@@ -33,6 +33,12 @@ namespace Aljas_Consultation.Controllers
                 .Consultation
                 .Include(c => c.Session)
                 .Where(r => r.PeriodId == PeriodId);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                applicationDbContext = applicationDbContext.Where(s => s.Teacher!.Contains(searchString));
+            }
+
             return View(await applicationDbContext.ToListAsync());
         }
 
