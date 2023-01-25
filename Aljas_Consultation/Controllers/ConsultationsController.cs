@@ -115,7 +115,7 @@ namespace Aljas_Consultation.Controllers
                     .Select(g => g.Key);
 
                 //Get the teachers who does not have consultation in this period
-                var missingTeachers = allTeachers.Except(teachersInPeriod);
+                var missingTeachers = allTeachers.Where(t => !teachersInPeriod.Contains(t) || consultations.Count(c => c.Teacher == t) < 2);
 
                 foreach (var teacher in missingTeachers)
                 {
