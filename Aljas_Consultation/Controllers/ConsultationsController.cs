@@ -213,6 +213,59 @@ namespace Aljas_Consultation.Controllers
         }
 
         // GET: Consultations/Edit/5
+        public async Task<IActionResult> ConsultationEdit(int? id)
+        {
+            if (id == null || _context.Consultation == null)
+            {
+                return NotFound();
+            }
+
+            var consultation = await _context.Consultation.FindAsync(id);
+            if (consultation == null)
+            {
+                return NotFound();
+            }
+            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
+            return View(consultation);
+        }
+
+        // POST: Consultations/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConsultationEdit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId,Session")] Consultation consultation)
+        {
+            if (id != consultation.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(consultation);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ConsultationExists(consultation.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
+            return View(consultation);
+        }
+
+        // GET: Consultations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Consultation == null)
@@ -234,7 +287,7 @@ namespace Aljas_Consultation.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId,Session")] Consultation consultation)
         {
             if (id != consultation.Id)
             {
@@ -306,6 +359,43 @@ namespace Aljas_Consultation.Controllers
         private bool ConsultationExists(int id)
         {
           return _context.Consultation.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> ConsultationDelete(int? id)
+        {
+            if (id == null || _context.Consultation == null)
+            {
+                return NotFound();
+            }
+
+            var consultation = await _context.Consultation
+                .Include(c => c.Session)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (consultation == null)
+            {
+                return NotFound();
+            }
+
+            return View(consultation);
+        }
+
+        // POST: Consultations/Delete/5
+        [HttpPost, ActionName("ConsultationDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConsultationDeleteConfirmed(int id)
+        {
+            if (_context.Consultation == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Consultation'  is null.");
+            }
+            var consultation = await _context.Consultation.FindAsync(id);
+            if (consultation != null)
+            {
+                _context.Consultation.Remove(consultation);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
