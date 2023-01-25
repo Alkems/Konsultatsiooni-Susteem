@@ -215,7 +215,7 @@ namespace Aljas_Consultation.Controllers
         // GET: Consultations/Edit/5
         public async Task<IActionResult> ConsultationEdit(int? id)
         {
-            if (id == null || _context.Consultation == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -225,16 +225,15 @@ namespace Aljas_Consultation.Controllers
             {
                 return NotFound();
             }
-            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
+
+            ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Name", consultation.PeriodId);
+
             return View(consultation);
         }
 
-        // POST: Consultations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConsultationEdit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId,Session")] Consultation consultation)
+        public async Task<IActionResult> ConsultationEdit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
         {
             if (id != consultation.Id)
             {
@@ -259,7 +258,7 @@ namespace Aljas_Consultation.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ConsultationsByPeriod));
             }
             ViewData["PeriodId"] = new SelectList(_context.Period, "Id", "Id", consultation.PeriodId);
             return View(consultation);
@@ -395,7 +394,7 @@ namespace Aljas_Consultation.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ConsultationsByPeriod));
         }
     }
 }
