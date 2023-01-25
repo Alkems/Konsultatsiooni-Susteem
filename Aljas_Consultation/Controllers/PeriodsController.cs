@@ -150,6 +150,58 @@ namespace Aljas_Consultation.Controllers
             return View(period);
         }
 
+
+
+        public async Task<IActionResult> PeriodEdit(int? id)
+        {
+            if (id == null || _context.Period == null)
+            {
+                return NotFound();
+            }
+
+            var period = await _context.Period.FindAsync(id);
+            if (period == null)
+            {
+                return NotFound();
+            }
+            return View(period);
+        }
+
+        // POST: Periods/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PeriodEdit(int id, [Bind("Id,Name")] Period period)
+        {
+            if (id != period.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(period);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PeriodExists(period.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(ShowPeriods));
+            }
+            return View(period);
+        }
+
         // GET: Periods/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -190,6 +242,43 @@ namespace Aljas_Consultation.Controllers
         private bool PeriodExists(int id)
         {
           return _context.Period.Any(e => e.Id == id);
+        }
+
+
+        public async Task<IActionResult> PeriodDelete(int? id)
+        {
+            if (id == null || _context.Period == null)
+            {
+                return NotFound();
+            }
+
+            var period = await _context.Period
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (period == null)
+            {
+                return NotFound();
+            }
+
+            return View(period);
+        }
+
+        // POST: Periods/Delete/5
+        [HttpPost, ActionName("PeriodDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PeriodDeleteConfirmed(int id)
+        {
+            if (_context.Period == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Period'  is null.");
+            }
+            var period = await _context.Period.FindAsync(id);
+            if (period != null)
+            {
+                _context.Period.Remove(period);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ShowPeriods));
         }
     }
 }
