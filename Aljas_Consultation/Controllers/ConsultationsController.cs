@@ -161,8 +161,29 @@ namespace Aljas_Consultation.Controllers
         [Authorize]
         public IActionResult AddConsultation()
         {
+            ViewBag.Teachers = SeedData.Teachers.Select(x => new SelectListItem { Text = x, Value = x });
             ViewData["PeriodId"] = CreatePeriodSelectList();
             return View();
+        }
+
+        [Authorize]
+        public IActionResult AddTeacher()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddTeacher(string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                SeedData.Teachers.Add(name);
+                //Save the new teacher to your data source, if necessary
+            }
+
+            return RedirectToAction("AddConsultation");
         }
 
         [Authorize]

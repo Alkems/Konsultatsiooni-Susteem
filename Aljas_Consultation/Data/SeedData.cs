@@ -9,6 +9,7 @@ namespace Aljas_Consultation.Data
 {
     public class SeedData : Controller
     {
+        public static List<string> Teachers = new List<string> { "Mihkel", "Tanel", "Peeter", "Kivikangur" };
         public static void Initialize(IServiceProvider serviceProvider)
         {
             using (var context = new ApplicationDbContext(
