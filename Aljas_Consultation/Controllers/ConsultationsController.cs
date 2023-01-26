@@ -179,29 +179,21 @@ namespace Aljas_Consultation.Controllers
         {
             if (!string.IsNullOrEmpty(name))
             {
-                SeedData.Teachers.Add(name);
-                //Save the new teacher to your data source, if necessary
+                SeedData.Teachers.Add(name); // add the teacher's name to the list
+
+                // Create a new list of SelectListItem objects
+                var teachersList = new List<SelectListItem>();
+                foreach (var teacher in SeedData.Teachers)
+                {
+                    teachersList.Add(new SelectListItem { Value = teacher, Text = teacher });
+                }
+
+                return RedirectToAction("AddConsultation", new { teachers = teachersList });
             }
-
-            return RedirectToAction("AddConsultation");
-        }
-
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddConsultation([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,Session,PeriodId")] Consultation consultation)
-        {
-            var Session = await _context.Period.FirstOrDefaultAsync(m => m.Id == consultation.PeriodId);
-            consultation.Session = Session;
-            ModelState.ClearValidationState(nameof(consultation.Session));
-            TryValidateModel(consultation);
-            if (ModelState.IsValid)
+            else
             {
-                _context.Add(consultation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("ConsultationsByPeriod", new { id = consultation.PeriodId });
+                return RedirectToAction("AddConsultation");
             }
-            return View(consultation);
         }
 
 

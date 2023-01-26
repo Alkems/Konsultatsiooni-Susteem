@@ -7,17 +7,16 @@
 <h1>AddConsultation</h1>
 
 <h4>Consultation</h4>
-<hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="AddConsultation">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <<div class="form-group">
+            <div class="form-group">
                 <label asp-for="Teacher"></label>
                 <select asp-for="Teacher" asp-items="ViewBag.Teachers" class="form-control"></select>
                 <span asp-validation-for="Teacher"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="Classroom" class="control-label"></label>
                 <input asp-for="Classroom" class="form-control" />
