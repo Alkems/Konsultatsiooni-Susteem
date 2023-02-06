@@ -102,7 +102,7 @@ namespace Aljas_Consultation.Controllers
             var missingConsultations = new List<MissingConsultation>();
             var allConsultations = await _context.Consultation.ToListAsync();
 
-            var allTeachers = allConsultations.Select(c => c.Teacher).Distinct();
+            var allTeachers = SeedData.Teachers.Union(allConsultations.Select(c => c.Teacher)).Distinct();
 
             foreach (var period in periods)
             {
@@ -125,6 +125,7 @@ namespace Aljas_Consultation.Controllers
             }
             return missingConsultations;
         }
+
 
 
 
