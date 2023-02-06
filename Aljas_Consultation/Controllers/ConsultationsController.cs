@@ -175,32 +175,40 @@ namespace Aljas_Consultation.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddTeacher(string name)
+        public IActionResult AddTeacher(Consultation name)
         {
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name.Teacher))
             {
-                SeedData.Teachers.Add(name); // add the teacher's name to the list
-
-                // Create a new list of SelectListItem objects
-                var teachersList = new List<SelectListItem>();
-                foreach (var teacher in SeedData.Teachers)
-                {
-                    teachersList.Add(new SelectListItem { Value = teacher, Text = teacher });
-                }
-
-                return RedirectToAction("AddConsultation", new { teachers = teachersList });
+                SeedData.Teachers.Add(name.Teacher);
+                //Save the new teacher to your data source, if necessary
             }
-            else
+
+            return RedirectToAction("AddConsultation");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddConsultation([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,Session,PeriodId")] Consultation consultation)
+        {
+            var Session = await _context.Period.FirstOrDefaultAsync(m => m.Id == consultation.PeriodId);
+            consultation.Session = Session;
+            ModelState.ClearValidationState(nameof(consultation.Session));
+            TryValidateModel(consultation);
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("AddConsultation");
+                _context.Add(consultation);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ConsultationsByPeriod", new { id = consultation.PeriodId });
             }
+            return View(consultation);
         }
 
 
-        private List<SelectListItem> CreatePeriodSelectList(int? selected=null)
+        private List<SelectListItem> CreatePeriodSelectList(int? selected = null)
         {
             var selectList = new SelectList(_context.Set<Period>(), "Id", "Name", selected).ToList();
-            selectList.Insert(0, new SelectListItem("Vali Periood","-1"));
+            selectList.Insert(0, new SelectListItem("Vali Periood", "-1"));
             return selectList;
         }
 
@@ -368,14 +376,14 @@ namespace Aljas_Consultation.Controllers
             {
                 _context.Consultation.Remove(consultation);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ConsultationExists(int id)
         {
-          return _context.Consultation.Any(e => e.Id == id);
+            return _context.Consultation.Any(e => e.Id == id);
         }
 
         [Authorize]
