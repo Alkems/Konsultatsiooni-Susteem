@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Aljas_Consultation.Models;
 using NuGet.DependencyResolver;
+using Microsoft.AspNetCore.Identity;
 
 namespace Aljas_Consultation.Data
 {
-    public class SeedData : Controller
+    public class SeedData
     {
         public static List<string> Teachers = new List<string> { "Mihkel", "Tanel", "Peeter", "Kivikangur" };
         public static void Initialize(IServiceProvider serviceProvider)
@@ -168,5 +169,39 @@ namespace Aljas_Consultation.Data
                 }
             }
         }
+
+        public const string ROLE_ADMIN = "Admin";
+        public static async Task SeedIdentity(UserManager<ConsultationUser> userManager, RoleManager<ConsultationRole> roleManager)
+        {
+            var user = await userManager.FindByNameAsync("admin@Consultation.com");
+            if (user == null)
+            {
+                user = new ConsultationUser();
+                user.Email = "admin@Consultation.com";
+                user.EmailConfirmed = true;
+                user.UserName = "admin@Consultation.com";
+                var userResult = await userManager.CreateAsync(user);
+                if (!userResult.Succeeded)
+                {
+                    throw new Exception($"User creation failed: {userResult.Errors.FirstOrDefault()}");
+                }
+                await userManager.AddPasswordAsync(user, "Pa$$w0rd");
+            }
+            var role = await roleManager.FindByNameAsync(ROLE_ADMIN);
+            if (role == null)
+            {
+                role = new ConsultationRole();
+                role.Name = ROLE_ADMIN;
+                role.NormalizedName = ROLE_ADMIN;
+                var roleResult = roleManager.CreateAsync(role).Result;
+                if (!roleResult.Succeeded)
+                {
+                    throw new Exception(roleResult.Errors.First().Description);
+                }
+            }
+            await userManager.AddToRoleAsync(user, ROLE_ADMIN);
+        }
+
     }
+
 }
