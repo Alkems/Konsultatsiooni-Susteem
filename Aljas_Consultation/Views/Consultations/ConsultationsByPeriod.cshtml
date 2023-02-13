@@ -1,4 +1,9 @@
-﻿@model Aljas_Consultation.Models.ConsultationTeacherViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ConsultationUser> SignInManager
+@inject UserManager<ConsultationUser> UserManager
+
+
+@model Aljas_Consultation.Models.ConsultationTeacherViewModel
 
 @{
     ViewData["Title"] = "View";
@@ -59,10 +64,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndTime)
                 </td>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
                 <td>
-                    <a asp-action="ConsultationEdit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="ConsultationEdit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="ConsultationDelete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                </td> 
+                }          
             </tr>
         }
     </tbody>

@@ -27,14 +27,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                {
-                <td>
-                    <a asp-action="PeriodEdit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="Consultations" asp-action="ConsultationsByPeriod" asp-route-id="@item.Id">Consultations</a> |
-                    <a asp-action="PeriodDelete" asp-route-id="@item.Id">Delete</a>
-                </td> 
-                }          
+                
+                <td>                   
+                    <a asp-controller="Consultations" asp-action="ConsultationsByPeriod" asp-route-id="@item.Id">Consultations</a>                     
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {                       
+                       <a asp-action="PeriodDelete" asp-route-id="@item.Id">Delete</a> 
+                       <a asp-action="PeriodEdit" asp-route-id="@item.Id">Edit</a>
+                    }
+                </td>                        
             </tr>
         }
     </tbody>
