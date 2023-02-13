@@ -11,10 +11,6 @@
 
 <h1>Consultations</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
 <form asp-controller="Consultations" asp-action="ConsultationsByPeriod" method="get">
     <p>
         <select asp-for="ConsultationTeacher" asp-items="Model.Teachers">
@@ -67,7 +63,7 @@
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                 {
                 <td>
-                        <a asp-action="ConsultationEdit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="ConsultationEdit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="ConsultationDelete" asp-route-id="@item.Id">Delete</a>
                 </td> 
                 }          
