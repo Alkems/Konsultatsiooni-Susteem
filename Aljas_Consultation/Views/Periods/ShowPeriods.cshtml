@@ -1,4 +1,8 @@
-﻿@model IEnumerable<Aljas_Consultation.Models.Period>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ConsultationUser> SignInManager
+@inject UserManager<ConsultationUser> UserManager
+
+@model IEnumerable<Aljas_Consultation.Models.Period>
 
 @{
     ViewData["Title"] = "Periods";
@@ -23,11 +27,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
                 <td>
                     <a asp-action="PeriodEdit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-controller="Consultations" asp-action="ConsultationsByPeriod" asp-route-id="@item.Id">Consultations</a> |
                     <a asp-action="PeriodDelete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                </td> 
+                }          
             </tr>
         }
     </tbody>
