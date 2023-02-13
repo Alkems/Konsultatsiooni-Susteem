@@ -81,7 +81,7 @@ namespace Aljas_Consultation.Controllers
         // POST: Periods/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPeriod(Period period)
@@ -153,7 +153,7 @@ namespace Aljas_Consultation.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public async Task<IActionResult> PeriodEdit(int? id)
         {
             if (id == null || _context.Period == null)
@@ -172,7 +172,7 @@ namespace Aljas_Consultation.Controllers
         // POST: Periods/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PeriodEdit(int id, [Bind("Id,Name")] Period period)
@@ -247,7 +247,7 @@ namespace Aljas_Consultation.Controllers
           return _context.Period.Any(e => e.Id == id);
         }
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public async Task<IActionResult> PeriodDelete(int? id)
         {
             if (id == null || _context.Period == null)
@@ -266,7 +266,7 @@ namespace Aljas_Consultation.Controllers
         }
 
         // POST: Periods/Delete/5
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost, ActionName("PeriodDelete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PeriodDeleteConfirmed(int id)

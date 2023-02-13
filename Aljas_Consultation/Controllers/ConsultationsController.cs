@@ -159,7 +159,7 @@ namespace Aljas_Consultation.Controllers
         }
 
         // GET: Consultations/Create
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public IActionResult AddConsultation()
         {
             ViewBag.Teachers = SeedData.Teachers.Select(x => new SelectListItem { Text = x, Value = x });
@@ -167,13 +167,13 @@ namespace Aljas_Consultation.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public IActionResult AddTeacher()
         {
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddTeacher(Consultation name)
@@ -187,7 +187,7 @@ namespace Aljas_Consultation.Controllers
             return RedirectToAction("AddConsultation");
         }
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddConsultation([Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,Session,PeriodId")] Consultation consultation)
@@ -238,7 +238,7 @@ namespace Aljas_Consultation.Controllers
         }
 
         // GET: Consultations/Edit/5
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public async Task<IActionResult> ConsultationEdit(int? id)
         {
             if (id == null)
@@ -257,7 +257,7 @@ namespace Aljas_Consultation.Controllers
             return View(consultation);
         }
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConsultationEdit(int id, [Bind("Id,Teacher,Classroom,Day,StartTime,EndTime,PeriodId")] Consultation consultation)
@@ -387,7 +387,7 @@ namespace Aljas_Consultation.Controllers
             return _context.Consultation.Any(e => e.Id == id);
         }
 
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public async Task<IActionResult> ConsultationDelete(int? id)
         {
             if (id == null || _context.Consultation == null)
@@ -407,7 +407,7 @@ namespace Aljas_Consultation.Controllers
         }
 
         // POST: Consultations/Delete/5
-        [Authorize]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         [HttpPost, ActionName("ConsultationDelete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConsultationDeleteConfirmed(int id)
